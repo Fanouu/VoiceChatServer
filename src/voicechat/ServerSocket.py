@@ -10,6 +10,8 @@ class ServerSocket(Thread):
 
     server: Server.Server = None
 
+    running = None
+
     def __init__(self, ip, port, server):
         super().__init__()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.SOL_UDP)
@@ -19,6 +21,13 @@ class ServerSocket(Thread):
 
         self.ip = ip
         self.port = port
+
+    def start(self) -> None:
+        super().start()
+        self.running = True
+
+    def stop(self) -> None:
+        self.running = False
 
     def run(self) -> None:
         self.socket.bind((self.ip, self.port))
