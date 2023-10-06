@@ -5,6 +5,7 @@ from src.voicechat import Logger
 from src.voicechat.Logger import Logger
 from src.voicechat.client.ClientManager import ClientManager
 
+
 class Server:
     serversocket = None
     logger = None
@@ -19,3 +20,6 @@ class Server:
 
     def getLogger(self) -> Type[Logger]:
         return self.logger
+
+    def getClientManager(self) -> ClientManager:
+        return self.clientManager

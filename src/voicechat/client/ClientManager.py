@@ -1,4 +1,5 @@
 from src.voicechat.client.Client import Client
+from colorama import Style, Fore
 
 
 class ClientException(Exception):
@@ -32,14 +33,14 @@ class ClientManager:
     def addClient(self, address: tuple, mtu_size):
         addressSTR = ":".join(self.toSTR(address))
         if not self.getClient(address) is None:
-            raise ClientException("§cClient with this address: " + addressSTR + " can be registered, because it is already registered !")
+            raise ClientException(Fore.RED + "Client with this address: " + addressSTR + " can be registered, because it is already registered !" + Style.RESET_ALL)
         self.clients[addressSTR] = Client(self.server, address, mtu_size)
 
     def removeClient(self, address: tuple):
         print("Remove Client")
         addressSTR = ":".join(self.toSTR(address))
         if self.getClient(address) is None:
-            raise ClientException("No Client with this address: " + addressSTR + " registered !")
+            raise ClientException(Fore.RED + "No Client with this address: " + addressSTR + " registered !" + Style.RESET_ALL)
         del self.clients[addressSTR]
 
     def toSTR(self, array: tuple):

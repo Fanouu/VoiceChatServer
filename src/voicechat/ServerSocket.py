@@ -1,6 +1,11 @@
 import socket
 from threading import Thread
 from src.voicechat import Server
+from src.voicechat.packets.Packet import Packet
+from src.voicechat.packets.PacketId import PacketId
+from src.voicechat.packets.UnconnectedPing import UnconnectedPing
+from src.voicechat.packets.UnconnectedPong import UnconnectedPong
+
 
 class ServerSocket(Thread):
     socket = None
@@ -35,5 +40,23 @@ class ServerSocket(Thread):
             data, clientAddress = self.socket.recvfrom(65535)
             self.onRun(data, clientAddress)
 
+    def sendPacketTo(self, packet: Packet, address):
+        self.socket.sendto(packet.data, address)
+
     def onRun(self, data, address):
-        pass
+        packetId = data[0]
+
+        if not self.server.getClientManager().getClient(address) is None:
+            client = self.server.getClientManager().getClient(address)
+            client.onReceivePacket(data)
+
+        if packetId == PacketId.UNCONNECTED_PING:
+            packet = UnconnectedPing(data)
+            packet.decode()
+
+            pong = UnconnectedPong()
+            pong.client_timestamp = packet.client_timestamp
+            pong.magic = packet.magic
+            pong.encode()
+
+            self.sendPacketTo(pong, address)

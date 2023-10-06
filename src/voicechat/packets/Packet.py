@@ -1,20 +1,25 @@
 import json
+from src.voicechat.packets.Buffer import Buffer
 
 
-class Packet:
-    packet_id = 0
-    data = None
-    body = None
+class Packet(Buffer):
+    packet_id = 0x00
+
+    def decodeHeader(self):
+        return self.readByte()
+
+    def encodeHeader(self):
+        self.putUnsignedByte(self.packet_id)
+
+    def decode(self):
+        self.decodeHeader()
+        if hasattr(self, 'decodePayload'):
+            self.decodePayload()
 
     def encode(self):
-        data = {'packetId': self.packet_id, 'packetData': self.data}
-        self.body = json.dumps(data)
+        self.encodeHeader()
         if hasattr(self, 'encodePayload'):
             self.encodePayload()
 
-    def decode(self):
-        body = json.loads(self.body)
-        self.packet_id = body['packetId']
-        self.data = body['packetData']
-        if hasattr(self, 'decodePayload'):
-            self.decodePayload()
+    def toDict(self):
+        return {"data": self.data}
