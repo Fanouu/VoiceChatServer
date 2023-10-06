@@ -1,0 +1,3 @@
+class PacketId:
+    UNCONNECTED_PING = 0
+    UNCONNECTED_PONG = 1
