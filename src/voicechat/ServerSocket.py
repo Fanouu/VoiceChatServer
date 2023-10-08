@@ -5,7 +5,8 @@ from src.voicechat.packets.Packet import Packet
 from src.voicechat.packets.PacketId import PacketId
 from src.voicechat.packets.UnconnectedPing import UnconnectedPing
 from src.voicechat.packets.UnconnectedPong import UnconnectedPong
-
+from src.voicechat.packets.ClientOpenConnection import ClientOpenConnection
+from src.voicechat.packets.ClientOpenConnectionReply import ClientOpenConnectionReply
 
 class ServerSocket(Thread):
     socket = None
@@ -60,3 +61,14 @@ class ServerSocket(Thread):
             pong.encode()
 
             self.sendPacketTo(pong, address)
+        if packetId == PacketId.CLIENT_OPEN_CONNECTION:
+            packet = ClientOpenConnection(data)
+            packet.decode()
+
+            reply = ClientOpenConnectionReply()
+            reply.magic = packet.magic
+            reply.encode()
+
+            self.sendPacketTo(reply, address)
+            self.server.getClientManager().addClient(address)
+
