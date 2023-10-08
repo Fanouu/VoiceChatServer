@@ -49,7 +49,9 @@ class ServerSocket(Thread):
 
         if not self.server.getClientManager().getClient(address) is None:
             client = self.server.getClientManager().getClient(address)
-            client.onReceivePacket(data)
+            packet = Packet(data)
+            packet.decode()
+            client.onReceivePacket(packet)
 
         if packetId == PacketId.UNCONNECTED_PING:
             packet = UnconnectedPing(data)
