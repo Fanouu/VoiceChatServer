@@ -10,6 +10,7 @@ class Server:
     serversocket = None
     logger = None
     clientManager = None
+    PROTOCOL_VERSION = 1
 
     def __init__(self):
         self.logger = Logger.Logger
