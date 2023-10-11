@@ -29,11 +29,11 @@ class ClientManager:
         else:
             return None
 
-    def addClient(self, address: tuple):
+    def addClient(self, address: tuple, magic):
         addressSTR = ":".join(self.toSTR(address))
         if not self.getClient(address) is None:
             raise ClientException(Fore.RED + "Client with this address: " + addressSTR + " can be registered, because it is already registered !" + Style.RESET_ALL)
-        self.clients[addressSTR] = Client(self.server, address)
+        self.clients[addressSTR] = Client(self.server, address, magic)
 
     def removeClient(self, address: tuple):
         print("Remove Client")

@@ -2,7 +2,7 @@ from src.voicechat.packets.Packet import Packet
 from src.voicechat.packets.PacketId import PacketId
 
 class ClientOpenConnectionReply(Packet):
-    packet_id = PacketId.CLIENT_OPEN_CONNECTIONREPLY
+    packet_id = PacketId.ClientOpenConnectionReply
 
     magic: bytes = None
 

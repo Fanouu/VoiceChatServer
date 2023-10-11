@@ -7,6 +7,9 @@ from src.voicechat.packets.UnconnectedPing import UnconnectedPing
 from src.voicechat.packets.UnconnectedPong import UnconnectedPong
 from src.voicechat.packets.ClientOpenConnection import ClientOpenConnection
 from src.voicechat.packets.ClientOpenConnectionReply import ClientOpenConnectionReply
+from src.voicechat.packets.PlayerUpdatePosition import PlayerUpdatePosition
+from src.voicechat.client.Location import Location
+
 
 class ServerSocket(Thread):
     socket = None
@@ -14,9 +17,11 @@ class ServerSocket(Thread):
     ip = None
     port = None
 
-    server: Server.Server = None
+    server = None
 
     running = None
+
+    players: dict = {}
 
     def __init__(self, ip, port, server):
         super().__init__()
@@ -47,6 +52,11 @@ class ServerSocket(Thread):
     def onRun(self, data, address):
         packetId = data[0]
 
+        if packetId == PacketId.PlayerUpdatePosition:
+            packet = PlayerUpdatePosition(data)
+            packet.decode()
+
+            self.players[self.addressToStr(address)] = Location(packet.x, packet.y, packet.z, packet.world)
         if not self.server.getClientManager().getClient(address) is None:
             client = self.server.getClientManager().getClient(address)
             packet = Packet(data)
@@ -71,6 +81,8 @@ class ServerSocket(Thread):
             reply.magic = packet.magic
             reply.encode()
 
+            self.server.getClientManager().addClient(address, packet.magic)
             self.sendPacketTo(reply, address)
-            self.server.getClientManager().addClient(address)
 
+    def addressToStr(self, address):
+        return ":".join(self.server.clientManager.toSTR(address))

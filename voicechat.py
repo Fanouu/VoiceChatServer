@@ -1,3 +1,3 @@
-from src.voicechat import Server
+#from src.voicechat.Server import Server
 
-voicechatServet = Server.Server()
+#voicechatServet = Server()

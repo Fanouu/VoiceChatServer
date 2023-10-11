@@ -3,7 +3,7 @@ from src.voicechat.packets.PacketId import PacketId
 
 
 class IncompatibleProtocolVersion(Packet):
-    packet_id = PacketId.INCOMPATIBLE_PROTOCOL_VERSION
+    packet_id = PacketId.IncompatibleProtocolVersion
 
     server_protocol_version: bytes = None
     magic: bytes = None
