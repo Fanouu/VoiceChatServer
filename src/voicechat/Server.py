@@ -11,6 +11,7 @@ class Server:
     logger = None
     clientManager = None
     PROTOCOL_VERSION = 1
+    MAX_DISTANCE = 50
 
     def __init__(self):
         self.logger = Logger.Logger

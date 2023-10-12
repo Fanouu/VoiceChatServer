@@ -52,11 +52,6 @@ class ServerSocket(Thread):
     def onRun(self, data, address):
         packetId = data[0]
 
-        if packetId == PacketId.PlayerUpdatePosition:
-            packet = PlayerUpdatePosition(data)
-            packet.decode()
-
-            self.players[self.addressToStr(address)] = Location(packet.x, packet.y, packet.z, packet.world)
         if not self.server.getClientManager().getClient(address) is None:
             client = self.server.getClientManager().getClient(address)
             packet = Packet(data)
